@@ -11,7 +11,6 @@ board = [
 PC = +1
 HUMAN = -1
 
-
 def evaluate(state):
     """
     """
@@ -23,70 +22,10 @@ def evaluate(state):
         score = 0
     return score
 
-def eval_line(r1, c1, r2, c2, r3, c3):
+def gameovergame(state):
     """
     """
-    score = 0
-    '''
-    First cell case
-    Lets supose X is PC and O is a Human
-    So, we have:
-    X ? ?; score = +1
-    O ? ?; score = -1
-    ? ? ?; score = 0
-    '''
-    if (PC == board[r1][c1]):
-        score = +1
-    elif (HUMAN == board[r1][c1]):
-        score == -1
-
-    '''
-    Second cell case
-    Lets supose X is PC and O is a Human
-    So, we have:
-    X X ?; score = +10 because it has more chances to win
-    O O ?; score = -10 because it has more chances to win
-    ? ? ?; score = 0
-    '''
-    if (PC == board[r2][c2]):
-        if (score == 1):
-            score = +10     # X X ?; it has chances to win
-        elif (score == -1):
-            return 0        # X O ?; it has no chances to win
-        else:
-            score = +1      # ? X ?; cell 1 is empty
-    elif (HUMAN == board[r2][c2]):
-        if (score == -1):
-            score = -10     # O O ?; it has chances to win
-        elif (score == 1):
-            return 0        # X O ?; draw
-        else:
-            score = -1      # ? O ?; cell 1 is empty
-
-    '''
-    Third cell case
-    Lets supose X is PC and O is a Human
-    So, we have:
-    X X X; score = +100 win
-    O O O; score = -100 lose
-    ? ? ?; score = 0
-    '''
-    if (PC == board[r3][c3]):
-        if (score > 0):
-            score *=10      # X X X (+100) or ? X X (+10)
-        elif (score < 0):
-            return 0        # X X O or O ? X; draw
-        else:
-            score = +1      # ? ? X; cell 2 was empty
-    elif (HUMAN == board[r3][c3]):
-        if (score < 0):
-            score *=10      # O O O (-100) or ? O O (-10)
-        elif (score > 1):
-            return 0        # X X O or X ? O; draw
-        else:
-            score = -1      # ? ? O; cell 2 was empty
-
-    return score
+    return gameover(state, HUMAN) or gameover(state, PC)
 
 def gameover(state, player):
     """
@@ -106,6 +45,20 @@ def gameover(state, player):
         return True
     else:
         return False
+
+def domove(i, j):
+    """
+    """
+    if validmove(i, j):
+        board[i][j] = HUMAN
+
+def validmove(i, j):
+    """
+    """
+    if ([i, j] in clear_cells(board)):
+        return True
+    else:
+        return False
     
 def clear_cells(state):
     """
@@ -118,10 +71,28 @@ def clear_cells(state):
     return cells
     
 def minimax(state, depth, player):
-    if depth == 0 or gameover(state, player):
+    """
+    """
+    if (player == PC):
+        best = [-1, -1, -infinity]
+    else:
+        best = [-1, -1, +infinity]
+    
+    if (depth == 0 or gameovergame(state)):
         score = evaluate(state)
         return [-1, -1, score]
+    
+    for cell in clear_cells(state):
+        i, j = cell[0], cell[1]
+        state[i][j] = player
+        score = minimax(state, depth - 1, -player)
+        state[i][j] = 0
+        score[0], score[1] = i, j
 
-# Minimal test
-# print('Results', evaluate())
-print('Score: ', gameover(board, 1))
+        if (player == PC):
+            if (score[2] > best[2]):
+                best = score
+        else:
+            if (score[2] < best[2]):
+                best = score
+    return best
