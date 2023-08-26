@@ -1,9 +1,11 @@
-#
+# Min max algorithm for TIC TAC TOE!!!
+
+from math import inf as infinity
 
 board = [
-    [+1, +1, 0],
-    [ 0,  0, 0],
-    [ 0,  0, 0],
+    [ 0, 0, 0],
+    [ 0, 0, 0],
+    [ 0, 0, 0],
 ]
 
 PC = +1
@@ -86,5 +88,26 @@ def eval_line(r1, c1, r2, c2, r3, c3):
 
     return score
 
+def gameover(state, player):
+    if(
+        state[0][0] == player and state[0][1] == player and state[0][2] == player or
+        state[1][0] == player and state[1][1] == player and state[1][2] == player or
+        state[2][0] == player and state[2][1] == player and state[2][2] == player or
+        state[0][0] == player and state[1][0] == player and state[2][0] == player or
+        state[0][1] == player and state[1][1] == player and state[2][1] == player or
+        state[0][2] == player and state[1][2] == player and state[2][2] == player or
+        state[0][0] == player and state[1][1] == player and state[2][2] == player or
+        state[0][0] == player and state[1][1] == player and state[2][2] == player or
+        state[2][0] == player and state[1][1] == player and state[0][2] == player ):
+        return True
+    else:
+        return False
+    
+def minimax(state, depth, player):
+    if depth == 0 or gameover(state, player):
+        score = evaluate()
+        return score
+
 # Minimal test
-print('Results', evaluate())
+# print('Results', evaluate())
+print('Score: ', gameover(board, 1))
