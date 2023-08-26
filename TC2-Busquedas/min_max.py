@@ -33,9 +33,9 @@ def eval_line(r1, c1, r2, c2, r3, c3):
     O ? ?; score = -1
     ? ? ?; score = 0
     '''
-    if PC == board[r1, c1]:
+    if PC == board[r1][c1]:
         score = +1
-    elif HUMAN == board[r1, c1]:
+    elif HUMAN == board[r1][c1]:
         score == -1
 
     '''
@@ -46,14 +46,14 @@ def eval_line(r1, c1, r2, c2, r3, c3):
     O O ?; score = -10 because it has more chances to win
     ? ? ?; score = 0
     '''
-    if PC == board[r2, c2]:
+    if PC == board[r2][c2]:
         if score == 1:
             score = +10     # X X ?; it has chances to win
         elif score == -1:
             return 0        # X O ?; it has no chances to win
         else:
             score = +1      # ? X ?; cell 1 is empty
-    elif HUMAN == board[r2, c2]:
+    elif HUMAN == board[r2][c2]:
         if score == -1:
             score = -10     # O O ?; it has chances to win
         elif score == 1:
@@ -69,14 +69,14 @@ def eval_line(r1, c1, r2, c2, r3, c3):
     O O O; score = -100 lose
     ? ? ?; score = 0
     '''
-    if PC == board[r3, c3]:
+    if PC == board[r3][c3]:
         if score > 0:
             score *=10      # X X X (+100) or ? X X (+10)
         elif score < 0:
             return 0        # X X O or O ? X; draw
         else:
             score = +1      # ? ? X; cell 2 was empty
-    elif HUMAN == board[r3. c3]:
+    elif HUMAN == board[r3][c3]:
         if score < 0:
             score *=10      # O O O (-100) or ? O O (-10)
         elif score > 1:
