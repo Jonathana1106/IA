@@ -1,4 +1,7 @@
 # Min max algorithm for TIC TAC TOE!!!
+
+####################################################### Imports ####################################################################
+
 import platform
 import time
 import os
@@ -177,9 +180,9 @@ def minimax(state, depth, player):
                 best = score
                 best_moves = [score]
             elif score[2] == best[2]:
-                best_moves.append(score)                
+                best_moves.append(score)
 
-    return random.choice(best_moves)
+    return random.choice(best_moves) # Choose a random move from the list of best moves
 
 
 ######################################################### Game interface ##############################################################
@@ -187,41 +190,15 @@ def minimax(state, depth, player):
 def main():
     """
     Main function to run the Tic Tac Toe game.
+
+    This function initializes the game, prompts the player to choose their symbol (X or O), and decides whether
+    the human or the computer makes the first move. It then enters a loop where both players take turns until the
+    game is over. Finally, it announces the winner or a draw.
     """
     clean()
-    hchoice = ''  # X or O
-    pchoice = ''  # X or O
-    first = ''  # if human is the first
+    hchoice, pchoice = choose_symbols()  # X or O
+    first = choose_first()  # if human is the first
 
-    # Human chooses X or O to play
-    while hchoice != 'O' and hchoice != 'X':
-        try:
-            print('')
-            hchoice = input('Choose X or O\nChosen: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Setting computer's choice
-    if hchoice == 'X':
-        pchoice = 'O'
-    else:
-        pchoice = 'X'
-
-    # Human may start first
-    clean()
-    while first != 'Y' and first != 'N':
-        try:
-            first = input('First to start?[y/n]: ').upper()
-        except (EOFError, KeyboardInterrupt):
-            print('Bye')
-            exit()
-        except (KeyError, ValueError):
-            print('Bad choice')
-
-    # Main loop of this game
     while len(clearcells(board)) > 0 and not gameovergame(board):
         if first == 'N':
             iaturn(pchoice, hchoice)
@@ -230,20 +207,48 @@ def main():
         humanturn(pchoice, hchoice)
         iaturn(pchoice, hchoice)
 
-    # Game over message
+    announce_winner(pchoice, hchoice)
+
+
+def choose_symbols():
+    """
+    Prompt the player to choose their symbol (X or O).
+
+    Returns:
+        tuple: A tuple containing the computer's symbol and the human's symbol.
+    """
+    hchoice = ''
+    while hchoice != 'O' and hchoice != 'X':
+        hchoice = input('Choose X or O\nChosen: ').upper()
+    return ('O', 'X') if hchoice == 'X' else ('X', 'O')
+
+
+def choose_first():
+    """
+    Decide whether the human or the computer makes the first move.
+
+    Returns:
+        str: 'Y' if human goes first, 'N' if computer goes first.
+    """
+    first = ''
+    while first != 'Y' and first != 'N':
+        first = input('First to start?[y/n]: ').upper()
+    return first
+
+
+def announce_winner(pchoice, hchoice):
+    """
+    Announce the winner of the game or declare a draw.
+
+    Parameters:
+        pchoice (str): The computer's symbol ('X' or 'O').
+        hchoice (str): The human's symbol ('X' or 'O').
+    """
     if gameover(board, HUMAN):
-        clean()
-        print(f'Human turn [{hchoice}]')
-        render(board, pchoice, hchoice)
         print('YOU WIN!')
     elif gameover(board, PC):
-        clean()
-        print(f'Computer turn [{pchoice}]')
-        render(board, pchoice, hchoice)
         print('YOU LOSE!')
     else:
-        clean()
-        render(board, pchoice, hchoice)
         print('DRAW!')
 
     exit()
@@ -350,6 +355,8 @@ def humanturn(pchoice, hchoice):
         except (KeyError, ValueError):
             print('Bad choice')
 
+
+####################################################### Game Starts!!! ######################################################
 
 if __name__ == '__main__':
     main()
