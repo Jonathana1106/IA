@@ -182,3 +182,4 @@ cython_debug/
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
+.vscode/settings.json
