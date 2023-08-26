@@ -1,6 +1,7 @@
 # Min max algorithm for TIC TAC TOE!!!
 
 from math import inf as infinity
+import random  # Import random module for handling randomness
 
 # Initialize the game board as a 3x3 grid
 board = [
@@ -64,10 +65,10 @@ def gameover(state, player):
         [state[0][1], state[1][1], state[2][1]],
         [state[0][2], state[1][2], state[2][2]],
         [state[0][0], state[1][1], state[2][2]],
-        [state[0][0], state[1][1], state[2][2]],
-        [state[2][0], state[1][1], state[0][2]]
+        # Fix the error in the last combination
+        [state[2][0], state[2][1], state[2][2]]
     ]
-    if ([player, player, player] in winstate):
+    if [player, player, player] in winstate:
         return True
     else:
         return False
@@ -165,3 +166,76 @@ def minimax(state, depth, player):
                 best = score
 
     return best
+
+
+def computer_move():
+    """
+    Make a move for the computer using the Minimax algorithm and handle randomness.
+
+    Returns:
+        tuple[int, int]: The row and column indices of the computer's move.
+    """
+    depth = len(clear_cells(board))
+    if depth == 0 or gameovergame(board):
+        return -1, -1
+
+    if depth == 9:  # If it's the first move, play in the center
+        return 1, 1
+
+    best_move = minimax(board, depth, PC)
+
+    # Gather all the best moves with the same score
+    best_moves = []
+    for cell in clear_cells(board):
+        i, j = cell[0], cell[1]
+        if board[i][j] == 0:
+            board[i][j] = PC
+            move_score = minimax(board, depth - 1, HUMAN)[2]
+            board[i][j] = 0
+            if (PC == 1 and move_score >= best_move[2]) or (PC == -1 and move_score <= best_move[2]):
+                best_moves.append((i, j))
+
+    return random.choice(best_moves)  # Choose a random move from the best ones
+
+
+def print_board(state):
+    symbols = {0: " ", 1: "X", -1: "O"}
+    for row in state:
+        print(" | ".join(symbols[cell] for cell in row))
+        print("-" * 9)
+
+
+# Loop for player vs computer game
+while len(clear_cells(board)) > 0 and not gameovergame(board):
+    print("Current Board:")
+    print_board(board)
+
+    # Human's turn
+    while True:
+        row = int(input("Enter the row (0, 1, or 2) for your move: "))
+        col = int(input("Enter the column (0, 1, or 2) for your move: "))
+        if validmove(row, col):
+            domove(row, col)
+            break
+        else:
+            print("Invalid move! Try again.")
+
+    if len(clear_cells(board)) == 0 or gameovergame(board):
+        break
+
+    # Computer's turn
+    row, col = computer_move()
+    domove(row, col)
+
+    if len(clear_cells(board)) == 0 or gameovergame(board):
+        break
+
+print("Final Board:")
+print_board(board)
+
+if gameover(board, PC):
+    print("Computer wins!")
+elif gameover(board, HUMAN):
+    print("You win!")
+else:
+    print("It's a draw!")
