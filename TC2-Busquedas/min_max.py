@@ -2,6 +2,7 @@
 import platform
 import time
 import os
+import random
 from math import inf as infinity
 from random import choice
 
@@ -149,6 +150,7 @@ def minimax(state, depth, player):
         score = evaluate(state)
         return [-1, -1, score]
 
+    best_moves = []
     # Iterate through each available cell on the board.
     for cell in clearcells(state):
         i, j = cell[0], cell[1]
@@ -166,12 +168,18 @@ def minimax(state, depth, player):
         if player == PC:
             if score[2] > best[2]:
                 best = score
+                best_moves = [score]
+            elif score[2] == best[2]:
+                best_moves.append(score)
         # If the current player is the human, minimize the score.
         else:
             if score[2] < best[2]:
                 best = score
+                best_moves = [score]
+            elif score[2] == best[2]:
+                best_moves.append(score)                
 
-    return best
+    return random.choice(best_moves)
 
 
 ######################################################### Game interface ##############################################################
