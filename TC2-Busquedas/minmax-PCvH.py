@@ -1,6 +1,5 @@
 # Min max algorithm for TIC TAC TOE!!!
 
-####################################################### Imports ####################################################################
 
 import platform
 import time
@@ -10,7 +9,6 @@ from math import inf as infinity
 from random import choice
 
 
-######################################################### Game logic ##############################################################
 # Initialize the game board as a 3x3 grid
 board = [
     [0, 0, 0],
@@ -182,10 +180,9 @@ def minimax(state, depth, player):
             elif score[2] == best[2]:
                 best_moves.append(score)
 
-    return random.choice(best_moves) # Choose a random move from the list of best moves
+    # Choose a random move from the list of best moves
+    return random.choice(best_moves)
 
-
-######################################################### Game interface ##############################################################
 
 def main():
     """
@@ -355,8 +352,6 @@ def humanturn(pchoice, hchoice):
         except (KeyError, ValueError):
             print('Bad choice')
 
-
-####################################################### Game Starts!!! ######################################################
 
 if __name__ == '__main__':
     main()
