@@ -1,4 +1,3 @@
-# Jonathan IA MINMAX vs IA MINMAX
 # Min max algorithm for TIC TAC TOE!!!
 
 
@@ -10,16 +9,8 @@ from math import inf as infinity
 from random import choice
 
 
-# Initialize the game board as a 3x3 grid
-board = [
-    [0, 0, 0],
-    [0, 0, 0],
-    [0, 0, 0],
-]
-
 PC = +1  # Constant representing the computer's player
 PC2 = -1  # Constant representing the computer's 2 player
-winner = 0
 
 
 def evaluate(state):
@@ -188,49 +179,70 @@ def minimax(state, depth, player):
 
 def mainIAvsIA():
     """
-    Main function to run the Tic Tac Toe game.
+    Main function to run the Tic Tac Toe game between two AI players (IA vs IA).
 
     This function initializes the game and starts the game loop where two AI players play against each other.
     """
+    initialize_board()  # Reset the board at the beginning of each game
     p1_choice, p2_choice = 'X', 'O'  # Set symbols for the players
-
+    print("IA vs IA:")
     while len(clearcells(board)) > 0 and not gameovergame(board):
-        iaturn(p1_choice, p2_choice, 1)
+        iaturn(p1_choice, p2_choice, 1)  # IA 1 turn
         if not gameovergame(board):  # Check if the game is still ongoing
-            iaturn(p1_choice, p2_choice, 2)  # IA Random's turn
+            iaturn(p1_choice, p2_choice, 2)  # IA 2 turn
 
-    announce_winner(p1_choice, p2_choice)
+    # Return the winner or "Draw"
+    winner = announce_winner(p1_choice, p2_choice)
+    print("IA vs IA Winner:", winner)
+    return winner
 
 
 def mainIAvsRand():
     """
-    Main function to run the Tic Tac Toe game.
+    Main function to run the Tic Tac Toe game between AI and Random.
 
-    This function initializes the game and starts the game loop where two AI players play against each other (Random second).
+    This function initializes the game and starts the game loop where an AI player plays against Random.
     """
+    initialize_board()  # Reset the board at the beginning of each game
     p1_choice, p2_choice = 'X', 'O'  # Set symbols for the players
-
+    print("IA vs Random:")
     while len(clearcells(board)) > 0 and not gameovergame(board):
-        iaturn(p1_choice, p2_choice, 1)
+        iaturn(p1_choice, p2_choice, 1)  # IA MINMAX  turn
         if not gameovergame(board):  # Check if the game is still ongoing
             randomTurn(p1_choice, p2_choice)  # IA Random's turn
 
-    announce_winner(p1_choice, p2_choice)
+    # Return the winner or "Draw"
+    winner = announce_winner(p1_choice, p2_choice)
+    print("IA vs Rand Winner:", winner)
+    return winner
 
 
 def mainRandvsIA():
     """
-    Main function to run the Tic Tac Toe game.
+    Main function to run the Tic Tac Toe game between Random and AI.
 
-    This function initializes the game and starts the game loop where two AI players play against each other (Random first).
-    """    
+    This function initializes the game and starts the game loop where Random plays against an AI player.
+    """
+    initialize_board()  # Reset the board at the beginning of each game
     p1_choice, p2_choice = 'X', 'O'  # Set symbols for the players
-
+    print("Random vs IA:")
     while len(clearcells(board)) > 0 and not gameovergame(board):
         randomTurn(p1_choice, p2_choice)  # IA Random's turn
         if not gameovergame(board):  # Check if the game is still ongoing
-            iaturn(p1_choice, p2_choice, 1)
-    announce_winner(p1_choice, p2_choice)
+            iaturn(p1_choice, p2_choice, 1)  # IA MINMAX turn
+
+    # Return the winner or "Draw"
+    winner = announce_winner(p1_choice, p2_choice)
+    print("Rand vs IA Winner:", winner)
+    return winner
+
+# Initialize the game board as a 3x3 grid
+def initialize_board():
+    """
+    Initializes the game board with empty cells.
+    """
+    global board
+    board = [[0 for _ in range(3)] for _ in range(3)]
 
 
 def render(state, pchoice, hchoice):
@@ -264,22 +276,24 @@ def announce_winner(p1_choice, p2_choice):
     Parameters:
         p1_choice (str): The symbol for the first player ('X' or 'O').
         p2_choice (str): The symbol for the second player ('X' or 'O').
+
+    Returns:
+        int: 1 if IA Player 1 wins, 2 if IA Player 2 wins, or 0 for a draw.
     """
-    if gameover(board, PC):  # Check if IA MINMAX 1 wins
-        print('PLAYER IA 1 WINS!')
-        winner = 1
-    elif gameover(board, PC2):  # Check if IA MINMAX 2 wins
-        print('PLAYER IA 2 WINS!')
-        winner = 2
+    if gameover(board, PC):
+        print('PLAYER IA MINMAX WINS!')
+        return 1
+    elif gameover(board, PC2):
+        print('PLAYER IA Random WINS!')
+        return 2
     else:
         print('DRAW!')
-        winner = 0
-    exit()
+        return 0
 
 
 def iaturn(p1_choice, p2_choice, currentPlayer):
     """
-    Executes the AI player's turn for Player 1 (Minimax) in the game.
+    Executes the AI player's turn (Minimax) in the game.
 
     Parameters:
         p1_choice (str): The symbol for the first player ('X' or 'O').
@@ -296,20 +310,19 @@ def iaturn(p1_choice, p2_choice, currentPlayer):
         player_symbol = p2_choice
         currentPC = PC2
 
-    print(f'Player IA MINMAX 1 turn [{player_symbol}]')
+    print(f'Player IA MINMAX turn [{player_symbol}]')
 
     # PC is the player index for Player 1
     move = minimax(board, depth, currentPC)
     x, y = move[0], move[1]
-
     domove(x, y, currentPC)
-    # render(board, p1_choice, p2_choice)
-    # time.sleep(1)
+    render(board, p1_choice, p2_choice)
+    time.sleep(1)
 
 
 def randomTurn(p1_choice, p2_choice):
     """
-    Executes the AI player's turn for Player 2 (Random) in the game.
+    Executes the AI player's turn (Random) in the game.
 
     Parameters:
         p1_choice (str): The symbol for the first player ('X' or 'O').
@@ -321,31 +334,76 @@ def randomTurn(p1_choice, p2_choice):
 
     player_symbol = p2_choice
     print(f'Player IA RANDOM turn [{player_symbol}]')
-    # render(board, p1_choice, p2_choice)
-
     legal_moves = clearcells(board)
     random_move = random.choice(legal_moves)
     x, y = random_move[0], random_move[1]
-
     domove(x, y, PC2)  # Note: PC2 is used here to represent Player 2 (Random)
-    # time.sleep(1)
+    render(board, p1_choice, p2_choice)
+    time.sleep(1)
 
 
 def main():
-    IAvsIA = [0, 0, 0]
-    IAvsRand = [0, 0, 0]
-    RandvsIA = [0, 0, 0]
-    for x in range(0, 5):
-        mainIAvsIA()
-        IAvsIA[winner] = IAvsIA[winner]+1
-        mainIAvsRand()
-        IAvsRand[winner] = IAvsRand[winner]+1
-        mainRandvsIA()
-        RandvsIA[winner] = RandvsIA[winner]+1
-        pass
-    print(IAvsIA)
-    print(IAvsRand)
-    print(RandvsIA)
+    """
+    Main function to run a series of Tic Tac Toe games and track the results.
+
+    This function runs multiple Tic Tac Toe games between different combinations of AI players and
+    tracks the number of wins, losses, and draws for each scenario.
+
+    Prints the results for each scenario at the end of all games.
+    """
+    IAvsIA = [0, 0, 0]   # Tracks wins, losses, and draws for AI vs AI games
+    IAvsRand = [0, 0, 0] # Tracks wins, losses, and draws for AI vs Random games
+    RandvsIA = [0, 0, 0] # Tracks wins, losses, and draws for Random vs AI games
+
+    for _ in range(5):  # Play 5 games
+        winner_IAvsRand = mainIAvsRand()
+        if winner_IAvsRand == 1:
+            IAvsRand[0] += 1
+        elif winner_IAvsRand == -1:
+            IAvsRand[1] += 1
+        else:
+            IAvsRand[2] += 1
+
+        winner_RandvsIA = mainRandvsIA()
+        if winner_RandvsIA == -1:
+            RandvsIA[0] += 1
+        elif winner_RandvsIA == 1:
+            RandvsIA[1] += 1
+        else:
+            RandvsIA[2] += 1
+
+        winner_IAvsIA = mainIAvsIA()
+        if winner_IAvsIA == 1:
+            IAvsIA[0] += 1
+        elif winner_IAvsIA == -1:
+            IAvsIA[1] += 1
+        else:
+            IAvsIA[2] += 1
+
+    print("IA vs Random:")
+    print_results(IAvsRand)
+
+    print("Random vs IA:")
+    print_results(RandvsIA)
+
+    print("IA vs IA:")
+    print_results(IAvsIA)
 
 
-main()
+def print_results(results):
+    """
+    Print the results of the games (wins, losses, and draws) for a specific scenario.
+
+    Parameters:
+        results (list[int]): A list containing the counts of wins, losses, and draws.
+    """
+    labels = ["Gano", "Perdio", "Empato"]
+
+    for label, count in zip(labels, results):
+        print(f"{label}: {count}")
+
+    print()
+
+
+if __name__ == '__main__':
+    main()
