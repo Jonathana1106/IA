@@ -122,50 +122,89 @@ def clearcells(state):
     return cells
 
 
-def minimax(state, depth, player):
-    """
-    Implement the Minimax algorithm to find the best move for a player.
+# def minimax(state, depth, player):
+#     """
+#     Implement the Minimax algorithm to find the best move for a player.
 
-    Parameters:
-        state (list[list[int]]): The current game board state.
-        depth (int): The current depth in the search tree.
-        player (int): The player for whom to find the best move.
+#     Parameters:
+#         state (list[list[int]]): The current game board state.
+#         depth (int): The current depth in the search tree.
+#         player (int): The player for whom to find the best move.
 
-    Returns:
-        list[int]: A list containing the best move's coordinates (i, j) and its score.
-    """
+#     Returns:
+#         list[int]: A list containing the best move's coordinates (i, j) and its score.
+#     """
+#     if player == PC:
+#         best = [-1, -1, -infinity]
+#     else:
+#         best = [-1, -1, +infinity]
+
+#     # Base case: If the maximum depth is reached or the game is over, evaluate the state.
+#     if depth == 0 or gameovergame(state):
+#         score = evaluate(state)
+#         return [-1, -1, score]
+
+#     best_moves = []
+#     # Iterate through each available cell on the board.
+#     for cell in clearcells(state):
+#         i, j = cell[0], cell[1]
+
+#         # Simulate making a move for the current player and proceed with Minimax recursion.
+#         state[i][j] = player
+#         score = minimax(state, depth - 1, -player)
+#         # Reset the cell to its original state after simulating the move.
+#         state[i][j] = 0
+
+#         # Update the move's coordinates based on current iteration.
+#         score[0], score[1] = i, j
+
+#         # If the current player is the computer, maximize the score.
+#         if player == PC:
+#             if score[2] > best[2]:
+#                 best = score
+#                 best_moves = [score]
+#             elif score[2] == best[2]:
+#                 best_moves.append(score)
+#         # If the current player is the computer 2, minimize the score.
+#         else:
+#             if score[2] < best[2]:
+#                 best = score
+#                 best_moves = [score]
+#             elif score[2] == best[2]:
+#                 best_moves.append(score)
+
+#     # Choose a random move from the list of best moves
+#     return random.choice(best_moves)
+
+
+def minimax(state, depth, player, alpha, beta):
     if player == PC:
         best = [-1, -1, -infinity]
     else:
         best = [-1, -1, +infinity]
 
-    # Base case: If the maximum depth is reached or the game is over, evaluate the state.
     if depth == 0 or gameovergame(state):
         score = evaluate(state)
         return [-1, -1, score]
 
     best_moves = []
-    # Iterate through each available cell on the board.
     for cell in clearcells(state):
         i, j = cell[0], cell[1]
-
-        # Simulate making a move for the current player and proceed with Minimax recursion.
         state[i][j] = player
-        score = minimax(state, depth - 1, -player)
-        # Reset the cell to its original state after simulating the move.
+        score = minimax(state, depth - 1, -player, alpha, beta)
         state[i][j] = 0
-
-        # Update the move's coordinates based on current iteration.
         score[0], score[1] = i, j
 
-        # If the current player is the computer, maximize the score.
         if player == PC:
             if score[2] > best[2]:
                 best = score
                 best_moves = [score]
             elif score[2] == best[2]:
                 best_moves.append(score)
-        # If the current player is the computer 2, minimize the score.
+
+            alpha = max(alpha, best[2])
+            if beta <= alpha:
+                break
         else:
             if score[2] < best[2]:
                 best = score
@@ -173,7 +212,10 @@ def minimax(state, depth, player):
             elif score[2] == best[2]:
                 best_moves.append(score)
 
-    # Choose a random move from the list of best moves
+            beta = min(beta, best[2])
+            if beta <= alpha:
+                break
+
     return random.choice(best_moves)
 
 
@@ -289,7 +331,7 @@ def iaturn(p1_choice, p2_choice, currentPlayer):
     else:
         currentPC = PC2
     # PC is the player index for Player 1
-    move = minimax(board, depth, currentPC)
+    move = minimax(board, depth, currentPC, -infinity, +infinity)
     x, y = move[0], move[1]
     domove(x, y, currentPC)
 
@@ -323,7 +365,7 @@ def main():
     # Tracks wins, losses, and draws for Random vs AI games
     RandvsIA = [0, 0, 0]
 
-    for _ in range(50):  # Play 50 games
+    for _ in range(500):  # Play 50 games
         winner_IAvsRand = mainIAvsRand()
         if winner_IAvsRand == 1:
             IAvsRand[0] += 1
