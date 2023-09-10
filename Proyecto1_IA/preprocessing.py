@@ -63,6 +63,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
             if esquemaColor in esquemaColores:
                 enhancedImage = cv2.cvtColor(enhancedImage, esquemaColores[esquemaColor])
         
+        #Quitar estas lineas para que no muestre las ventanas y solo retorne
         cv2.imshow("Imagen Mejorada", enhancedImage)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
