@@ -74,4 +74,9 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
 #Ejemplo:
 imageRoute = "C:/Users/Renzo/Downloads/test.jpg"
 
-preProcessImage(imageRoute, True, True, False, 1, 15, None)
+
+#Sin usar esquema de color
+#preProcessImage(imageRoute, True, True, False, 1, 15, None)
+
+#Usando esquema de color válido
+preProcessImage(imageRoute, True, True, False, 1, 15, "BGR2XYZ")
