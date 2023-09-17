@@ -4,6 +4,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 
 # Step 1: Node Class Creation
+# This class represents a node in the decision tree.
 class Node:
     def __init__(self, feature=None, threshold=None, impurity=None, sample_count=None, value=None, left=None, right=None):
         self.feature = feature
@@ -44,6 +45,8 @@ def find_best_split(X, y, criterion='gini'):
     return best_feature, best_threshold
 
 
+# Impurity Functions (Gini and Entropy)
+# These functions calculate the impurity of a set of labels.
 def calculate_impurity(y_left, y_right, criterion='gini'):
     if criterion == 'gini':
         impurity_left = gini_impurity(y_left)
@@ -157,7 +160,8 @@ class DecisionTree:
         return predictions
 
 
-# Step 3: Data Splitting (Example using Numpy)
+# Step 3: Data Splitting
+# This function splits the dataset into training and test sets.
 def manual_train_test_split(X, y, train_proportion=0.8, random_state=None):
     # Calculate the number of training samples
     n_train_samples = int(train_proportion * len(X))
@@ -174,6 +178,7 @@ def manual_train_test_split(X, y, train_proportion=0.8, random_state=None):
 
 
 # Step 4: Cross-Validation Implementation
+# This function performs cross-validation to evaluate model performance.
 def cross_validation(X, y, k=5, max_depth=None, min_samples_split=2, criterion='gini'):
     # Split the training set into k subsets
     subsets_X = np.array_split(X, k)
