@@ -54,10 +54,10 @@ def calculate_gini(y_left, y_right, criterion='gini'):
             gini_left + (len(y_right) / total_samples) * gini_right
         return weighted_gini
     else:
-        # Implementar cálculo de otro criterio si es necesario
+        # Implement calculation for another criterion if needed
         pass
 
-# Función para calcular el índice Gini de un conjunto de etiquetas
+# Function to calculate the Gini index of a set of labels
 
 
 def gini_index(labels):
@@ -72,8 +72,9 @@ def gini_index(labels):
 
     return gini
 
-
 # Function to split the dataset into left and right subsets
+
+
 def split_dataset(X, y, feature, threshold):
     left_indices = X[:, feature] <= threshold
     right_indices = X[:, feature] > threshold
