@@ -5,10 +5,10 @@ import numpy as np
 
 
 class Node:
-    def __init__(self, feature=None, threshold=None, gini=None, sample_count=None, value=None, left=None, right=None):
+    def __init__(self, feature=None, threshold=None, impurity=None, sample_count=None, value=None, left=None, right=None):
         self.feature = feature
         self.threshold = threshold
-        self.gini = gini
+        self.impurity = impurity
         self.sample_count = sample_count
         self.value = value
         self.left = left
@@ -17,16 +17,16 @@ class Node:
 # Function to find the most common class in a list of labels
 
 
-def most_common_value(y):
+def most_common_class(y):
     class_counts = Counter(y)
-    most_common_class = class_counts.most_common(1)[0][0]
-    return most_common_class
+    most_common = class_counts.most_common(1)[0][0]
+    return most_common
 
 # Function to select the best feature and threshold for splitting
 
 
-def select_best_split(X, y, criterion='gini'):
-    best_gini = float('inf')
+def find_best_split(X, y, criterion='gini'):
+    best_impurity = float('inf')
     best_feature = None
     best_threshold = None
 
@@ -35,42 +35,68 @@ def select_best_split(X, y, criterion='gini'):
         for threshold in unique_thresholds:
             left_indices = X[:, feature] <= threshold
             right_indices = X[:, feature] > threshold
-            gini = calculate_gini(y[left_indices], y[right_indices], criterion)
+            impurity = calculate_impurity(
+                y[left_indices], y[right_indices], criterion)
 
-            if gini < best_gini:
-                best_gini = gini
+            if impurity < best_impurity:
+                best_impurity = impurity
                 best_feature = feature
                 best_threshold = threshold
 
     return best_feature, best_threshold
 
 
-def calculate_gini(y_left, y_right, criterion='gini'):
+def calculate_impurity(y_left, y_right, criterion='gini'):
     if criterion == 'gini':
-        gini_left = gini_index(y_left)
-        gini_right = gini_index(y_right)
+        impurity_left = gini_impurity(y_left)
+        impurity_right = gini_impurity(y_right)
         total_samples = len(y_left) + len(y_right)
-        weighted_gini = (len(y_left) / total_samples) * \
-            gini_left + (len(y_right) / total_samples) * gini_right
-        return weighted_gini
+        weighted_impurity = (len(y_left) / total_samples) * impurity_left + \
+            (len(y_right) / total_samples) * impurity_right
+        return weighted_impurity
+    elif criterion == 'entropy':
+        entropy_left = entropy_impurity(y_left)
+        entropy_right = entropy_impurity(y_right)
+        total_samples = len(y_left) + len(y_right)
+        weighted_entropy = (len(y_left) / total_samples) * entropy_left + \
+            (len(y_right) / total_samples) * entropy_right
+        return weighted_entropy
     else:
-        # Implement calculation for another criterion if needed
-        pass
+        raise ValueError(
+            "Invalid criterion. Supported criteria are 'gini' and 'entropy'.")
+
+
+# Function to calculate the entropy of a set of labels
+
+
+def entropy_impurity(labels):
+    num_samples = len(labels)
+    if num_samples == 0:
+        return 0.0
+
+    class_counts = Counter(labels)
+    impurity = 0.0
+    for class_count in class_counts.values():
+        class_probability = class_count / num_samples
+        impurity -= class_probability * np.log2(class_probability)
+
+    return impurity
+
 
 # Function to calculate the Gini index of a set of labels
 
 
-def gini_index(labels):
+def gini_impurity(labels):
     num_samples = len(labels)
     if num_samples == 0:
         return 0.0
     class_counts = Counter(labels)
-    gini = 1.0
+    impurity = 1.0
     for class_count in class_counts.values():
         class_probability = class_count / num_samples
-        gini -= class_probability ** 2
+        impurity -= class_probability ** 2
 
-    return gini
+    return impurity
 
 # Function to split the dataset into left and right subsets
 
@@ -103,11 +129,11 @@ class DecisionTree:
             # Create a leaf node with the majority class or the average value
             # depending on the problem (classification or regression)
             # Example for classification:
-            value = most_common_value(y)
+            value = most_common_class(y)
             return Node(value=value)
 
         # Choose the best feature and threshold to split the dataset
-        feature, threshold = select_best_split(X, y, self.criterion)
+        feature, threshold = find_best_split(X, y, self.criterion)
 
         # Split the dataset into left and right subsets
         X_left, y_left, X_right, y_right = split_dataset(
@@ -137,3 +163,19 @@ class DecisionTree:
             predictions.append(node.value)
 
         return predictions
+
+
+# Step 3: Data Splitting (Example using Numpy)
+def manual_train_test_split(X, y, train_proportion=0.8, random_state=None):
+    # Calculate the number of training samples
+    n_train_samples = int(train_proportion * len(X))
+
+    if random_state is not None:
+        # Set the seed for pseudo-random number generation
+        np.random.seed(random_state)
+
+    # Split the data into training and test sets
+    X_train, y_train = X[:n_train_samples], y[:n_train_samples]
+    X_test, y_test = X[n_train_samples:], y[n_train_samples:]
+
+    return X_train, y_train, X_test, y_test
