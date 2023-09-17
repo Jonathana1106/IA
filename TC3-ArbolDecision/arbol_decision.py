@@ -1,9 +1,9 @@
-from collections import Counter
 import numpy as np
+from collections import Counter
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
 
 # Step 1: Node Class Creation
-
-
 class Node:
     def __init__(self, feature=None, threshold=None, impurity=None, sample_count=None, value=None, left=None, right=None):
         self.feature = feature
@@ -14,17 +14,15 @@ class Node:
         self.left = left
         self.right = right
 
+
 # Function to find the most common class in a list of labels
-
-
 def most_common_class(y):
     class_counts = Counter(y)
     most_common = class_counts.most_common(1)[0][0]
     return most_common
 
+
 # Function to select the best feature and threshold for splitting
-
-
 def find_best_split(X, y, criterion='gini'):
     best_impurity = float('inf')
     best_feature = None
@@ -67,8 +65,6 @@ def calculate_impurity(y_left, y_right, criterion='gini'):
 
 
 # Function to calculate the entropy of a set of labels
-
-
 def entropy_impurity(labels):
     num_samples = len(labels)
     if num_samples == 0:
@@ -84,8 +80,6 @@ def entropy_impurity(labels):
 
 
 # Function to calculate the Gini index of a set of labels
-
-
 def gini_impurity(labels):
     num_samples = len(labels)
     if num_samples == 0:
@@ -98,9 +92,8 @@ def gini_impurity(labels):
 
     return impurity
 
+
 # Function to split the dataset into left and right subsets
-
-
 def split_dataset(X, y, feature, threshold):
     left_indices = X[:, feature] <= threshold
     right_indices = X[:, feature] > threshold
@@ -113,9 +106,8 @@ def split_dataset(X, y, feature, threshold):
 
     return X_left, y_left, X_right, y_right
 
+
 # Step 2: Decision Tree Class Creation
-
-
 class DecisionTree:
     def __init__(self, max_depth=None, min_samples_split=2, criterion='gini'):
         self.max_depth = max_depth
@@ -179,3 +171,65 @@ def manual_train_test_split(X, y, train_proportion=0.8, random_state=None):
     X_test, y_test = X[n_train_samples:], y[n_train_samples:]
 
     return X_train, y_train, X_test, y_test
+
+
+# Step 4: Cross-Validation Implementation
+def cross_validation(X, y, k=5, max_depth=None, min_samples_split=2, criterion='gini'):
+    # Split the training set into k subsets
+    subsets_X = np.array_split(X, k)
+    subsets_y = np.array_split(y, k)
+
+    # Lists to store metrics for each model
+    accuracy_scores = []
+    precision_scores = []
+    recall_scores = []
+    f1_scores = []
+
+    for i in range(k):
+        # Select the current validation set
+        X_valid = subsets_X[i]
+        y_valid = subsets_y[i]
+
+        # Create the training set excluding the validation set
+        X_train = np.concatenate([subsets_X[j] for j in range(k) if j != i])
+        y_train = np.concatenate([subsets_y[j] for j in range(k) if j != i])
+
+        # Train a decision tree model
+        tree = DecisionTree(
+            max_depth=max_depth, min_samples_split=min_samples_split, criterion=criterion)
+        tree.root = tree.train(X_train, y_train)
+
+        # Make predictions on the validation set
+        predictions = tree.predict(X_valid)
+
+        # Calculate metrics and record them
+        accuracy = accuracy_score(y_valid, predictions)
+        precision = precision_score(y_valid, predictions)
+        recall = recall_score(y_valid, predictions)
+        f1 = f1_score(y_valid, predictions)
+
+        accuracy_scores.append(accuracy)
+        precision_scores.append(precision)
+        recall_scores.append(recall)
+        f1_scores.append(f1)
+
+    # Calculate the mean and standard deviation of the metrics
+    mean_accuracy = np.mean(accuracy_scores)
+    std_accuracy = np.std(accuracy_scores)
+    mean_precision = np.mean(precision_scores)
+    std_precision = np.std(precision_scores)
+    mean_recall = np.mean(recall_scores)
+    std_recall = np.std(recall_scores)
+    mean_f1 = np.mean(f1_scores)
+    std_f1 = np.std(f1_scores)
+
+    return {
+        "mean_accuracy": mean_accuracy,
+        "std_accuracy": std_accuracy,
+        "mean_precision": mean_precision,
+        "std_precision": std_precision,
+        "mean_recall": mean_recall,
+        "std_recall": std_recall,
+        "mean_f1": mean_f1,
+        "std_f1": std_f1
+    }

@@ -9,7 +9,7 @@ predicted values for the new samples in new_samples.
 '''
 
 # Import necessary classes and functions from arbol_decision.py
-from arbol_decision import DecisionTree
+from arbol_decision import DecisionTree, manual_train_test_split
 import numpy as np
 
 # Create a test dataset
@@ -40,3 +40,10 @@ class predicted for a sample in new_samples.
 new_samples = np.array([[4, 5], [2, 2], [6, 7]])
 predictions = tree.predict(new_samples)
 print(predictions)
+
+# Split the dataset into training and test sets
+X_train, y_train, X_test, y_test = manual_train_test_split(X, y, train_proportion=0.8, random_state=42)
+
+# Print the sizes of the training and test sets
+print("Training set size:", len(X_train))
+print("Test set size:", len(X_test))
