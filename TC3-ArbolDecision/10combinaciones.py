@@ -30,7 +30,7 @@ X = np.array([[2, 1],
               [7, 5],
               [8, 6]])
 
-y = np.array([1, 0, 1, 1, 1])
+y = np.array([1, 0, 1, 1, 1, 0])
 
 X_train, y_train, X_test, y_test = manual_train_test_split(X, y, train_proportion=0.8, random_state=42)
 
@@ -49,12 +49,18 @@ for idx, result in enumerate(results):
     print(f"Combinacion {idx + 1}:")
     print(f"Parametros: {result['params']}")
     print("Metricas:")
-    print(f"\tPrecision Media: {result['metrics']['mean_accuracy']}")
-    print(f"\tPrecision Media: {result['metrics']['std_accuracy']}")
-    print(f"\tSensibilidad Media: {result['metrics']['mean_precision']}")
-    print(f"\tPuntuacion F1 Media: {result['metrics']['std_precision']}")
-    print(f"\tPrecision Media: {result['metrics']['mean_recall']}")
-    print(f"\tPrecision Media: {result['metrics']['std_recall']}")
-    print(f"\tSensibilidad Media: {result['metrics']['mean_f1']}")
-    print(f"\tPuntuacion F1 Media: {result['metrics']['std_f1']}")
+    print(f"\t Punteria Media: {result['metrics']['mean_accuracy']}")
+    print(f"\t Punteria Desviacion Estandar: {result['metrics']['std_accuracy']}")
+    print(f"\t Precision Media: {result['metrics']['mean_precision']}")
+    print(f"\t Precision Desviacion Estandar: {result['metrics']['std_precision']}")
+    print(f"\t Recall Media: {result['metrics']['mean_recall']}")
+    print(f"\t Recall Desviacion Estandar: {result['metrics']['std_recall']}")
+    print(f"\t F1 Media: {result['metrics']['mean_f1']}")
+    print(f"\t Desviacion Estandar F1: {result['metrics']['std_f1']}")
     print("\n")
+
+"""
+Para los diferentes parámetros y los 2 criterios seleccionados respectivamente. Los resultados de media no cambian
+si se altera la profundidad y la cantidad de splits dentro de la muestra bajo los criterios seleccionadors. Por lo
+tanto, lo único que queda es verificar cuál de los modelos nos da mejores resultados. 
+"""
