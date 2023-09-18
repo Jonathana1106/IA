@@ -62,5 +62,43 @@ for idx, result in enumerate(results):
 """
 Para los diferentes parámetros y los 2 criterios seleccionados respectivamente. Los resultados de media no cambian
 si se altera la profundidad y la cantidad de splits dentro de la muestra bajo los criterios seleccionadors. Por lo
-tanto, lo único que queda es verificar cuál de los modelos nos da mejores resultados. 
+tanto, lo único que queda es verificar cuál de los modelos nos da mejores resultados. En este caso, el mejor modelo
+es el gini y ese es el que escogemos.
 """
+
+# Analisis del modelo
+best_model_idx = np.argmax([result['metrics']['mean_accuracy'] for result in results])
+best_model_params = results[best_model_idx]['params']
+best_model_metrics = results[best_model_idx]['metrics']
+
+print("Mejor modelo:")
+print(f"Parametros: {best_model_params}")
+print("Metricas en Cross-Validation:")
+print(f"\t Punteria Media: {best_model_metrics['mean_accuracy']}")
+print(f"\t Punteria Desviacion Estandar: {best_model_metrics['std_accuracy']}")
+print(f"\t Precision Media: {best_model_metrics['mean_precision']}")
+print(f"\t Precision Desviacion Estandar: {best_model_metrics['std_precision']}")
+print(f"\t Recall Media: {best_model_metrics['mean_recall']}")
+print(f"\t Recall Desviacion Estandar: {best_model_metrics['std_recall']}")
+print(f"\t F1 Media: {best_model_metrics['mean_f1']}")
+print(f"\t Desviacion Estandar F1: {best_model_metrics['std_f1']}")
+
+# Step 7: Prueba en el set de prueba
+# Train the selected model on the entire training set
+selected_model = DecisionTree(**best_model_params)
+selected_model.root = selected_model.train(X_train, y_train)
+
+# Make predictions on the test set
+test_predictions = selected_model.predict(X_test)
+
+# Evaluate metrics on the test set
+test_accuracy = accuracy_score(y_test, test_predictions)
+test_precision = precision_score(y_test, test_predictions)
+test_recall = recall_score(y_test, test_predictions)
+test_f1 = f1_score(y_test, test_predictions)
+
+print("\n Metricas en el set de prueba:")
+print(f"Punteria: {test_accuracy}")
+print(f"Precision: {test_precision}")
+print(f"Recall: {test_recall}")
+print(f"F1 Score: {test_f1}")
