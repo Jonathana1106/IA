@@ -63,7 +63,7 @@ for idx, result in enumerate(results):
 Para los diferentes parámetros y los 2 criterios seleccionados respectivamente. Los resultados de media no cambian
 si se altera la profundidad y la cantidad de splits dentro de la muestra bajo los criterios seleccionadors. Por lo
 tanto, lo único que queda es verificar cuál de los modelos nos da mejores resultados. En este caso, el mejor modelo
-es el gini y ese es el que escogemos.
+es Parametros: {'max_depth': None, 'min_samples_split': 2, 'criterion': 'gini'} y ese es el que escogemos.
 """
 
 # Analisis del modelo
@@ -101,5 +101,8 @@ print(f"Recall: {test_recall}")
 print(f"F1 Score: {test_f1}")
 
 """
-Conclusiones:
+Conclusiones: Con los resultados podemos darnos cuenta que el modelo seleccionado la verdad nos da
+medias aceptables para el set de datos que se hicieron. Con el mejor resultado gini al momento del
+split para nuestros datos. Por lo tanto, es válido decir que el modelo seleccionado es el que nos
+da mejores resultados.
 """
