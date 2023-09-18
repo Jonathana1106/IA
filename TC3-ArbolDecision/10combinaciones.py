@@ -84,14 +84,11 @@ print(f"\t F1 Media: {best_model_metrics['mean_f1']}")
 print(f"\t Desviacion Estandar F1: {best_model_metrics['std_f1']}")
 
 # Step 7: Prueba en el set de prueba
-# Train the selected model on the entire training set
 selected_model = DecisionTree(**best_model_params)
 selected_model.root = selected_model.train(X_train, y_train)
 
-# Make predictions on the test set
 test_predictions = selected_model.predict(X_test)
 
-# Evaluate metrics on the test set
 test_accuracy = accuracy_score(y_test, test_predictions)
 test_precision = precision_score(y_test, test_predictions)
 test_recall = recall_score(y_test, test_predictions)
@@ -102,3 +99,7 @@ print(f"Punteria: {test_accuracy}")
 print(f"Precision: {test_precision}")
 print(f"Recall: {test_recall}")
 print(f"F1 Score: {test_f1}")
+
+"""
+Conclusiones:
+"""
