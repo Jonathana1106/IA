@@ -50,7 +50,7 @@ def searchFile(ui):
 
 ## Properties Dialog, Generate Button
 def getValues(ui):
-    global path, iterations, population
+    global path, iterations, population, gauss, median, resize, gama
     if ui.imagePath_textInput.text() == "":
         ui.imagePath_textInput.setText("No se ha seleccionado una imagen")
     else:
@@ -62,21 +62,13 @@ def getValues(ui):
         median = ui.median_checkb.isChecked()
         resize = ui.resize_checkb.isChecked()
 
-        print("Path: " + path)
-        print("Iterations: " + str(iterations))
-        print("Population: " + str(population))
-        print("Gama: " + gama)
-        print("Gauss: " + str(gauss))
-        print("Median: " + str(median))
-        print("Resize: " + str(resize))
         generationUi(ui)
 
 
 ## Generation Dialog
 ## Close Properties Dialog and Open Generation Dialog
 def generationUi(ui):
-
-    originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage = preProcessImage(path, resize, median, gauss, 1, 15, gama)
+    global path, iterations, population, gauss, median, resize, gama
 
     dlg = QtWidgets.QDialog()
     gen_ui = Ui_generation_ui()
@@ -84,6 +76,16 @@ def generationUi(ui):
 
     dlg.show()
     setCOntent(gen_ui)
+
+    print("Values from ui:")
+    print("Path: " + path)
+    print("Iterations: " + str(iterations))
+    print("Population: " + str(population))
+    print("Gama: " + gama)
+    print("Gauss: " + str(gauss))
+    print("Median: " + str(median))
+    print("Resize: " + str(resize))
+    originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage = preProcessImage(path, resize, median, gauss, 1, 15, gama)
 
 
     dlg.exec_()
@@ -97,5 +99,5 @@ def setCOntent(ui):
     ui.path_Label.setText("Path: " + path)
     ui.iterations_Label.setText("Iteraciones: " + str(iterations))
     ui.population_Label.setText("Población: " + str(population))
-    ui.originalPic_Viewer.setPixmap(QtGui.QPixmap(path))
+    ui.originalPic_Viewer.setPixmap(QtGui.QPixmap("imgs/Imagen Mejorada.jpg"))
     ui.generatedPic_View.setPixmap(QtGui.QPixmap(path))
