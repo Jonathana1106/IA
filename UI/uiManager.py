@@ -1,6 +1,8 @@
 import sys
-from mainUi import Ui_properties_Dialog
-from generationUi import Ui_generation_ui
+from UI.mainUi import Ui_properties_Dialog
+from UI.generationUi import Ui_generation_ui
+from ImageProcesing.preprocessing import preProcessImage
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QT_TR_NOOP as tr
 
@@ -10,7 +12,11 @@ from PyQt5.QtCore import QT_TR_NOOP as tr
 path = ""
 iterations = -1
 population = -1
-
+gauss = False
+median = False
+resize = False
+gama = ""
+gama_list =  ["BGR2GRAY", "BGR2RGB", "BGR2HSV", "BGR2Lab", "BGR2YUV", "BGR2XYZ", "BGR2HLS", "BGR2Luv", "BGR2YCrCb", "BGR2HLS_FULL"]
 
 ## Main Dialog, properties Dialog
 def init():
@@ -20,6 +26,8 @@ def init():
     ui = Ui_properties_Dialog()
  
     ui.setupUi(MainWindow)
+    ui.gama_combobox.addItems(gama_list)
+    ui.gama_combobox.setCurrentIndex(0)
     MainWindow.show()
     ui.imageSearch_Button.clicked.connect(lambda: searchFile(ui))
     ui.generate_Button.clicked.connect(lambda: getValues(ui))  
@@ -49,15 +57,26 @@ def getValues(ui):
         path = ui.imagePath_textInput.text()
         iterations = ui.iteration_spinBox.value()
         population = ui.population_spinBox.value()
+        gama = ui.gama_combobox.currentText()
+        gauss = ui.gauss_checkb.isChecked()
+        median = ui.median_checkb.isChecked()
+        resize = ui.resize_checkb.isChecked()
+
         print("Path: " + path)
         print("Iterations: " + str(iterations))
         print("Population: " + str(population))
+        print("Gama: " + gama)
+        print("Gauss: " + str(gauss))
+        print("Median: " + str(median))
+        print("Resize: " + str(resize))
         generationUi(ui)
 
 
 ## Generation Dialog
 ## Close Properties Dialog and Open Generation Dialog
 def generationUi(ui):
+
+    originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage = preProcessImage(path, resize, median, gauss, 1, 15, gama)
 
     dlg = QtWidgets.QDialog()
     gen_ui = Ui_generation_ui()

@@ -72,8 +72,8 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
 
 #Ruta de la imagen
 #Ejemplo:
-imageRoute = "C:/Users/Renzo/Downloads/test.jpg"
-
+#imageRoute = "C:/Users/Renzo/Downloads/test.jpg"
+imageRoute = "C:/Users/anagu/OneDrive/Imágenes/249d3b9cb0ad008580a328da145dbf9e.jpg"
 
 #Sin usar esquema de color
 #preProcessImage(imageRoute, True, True, False, 1, 15, None)
