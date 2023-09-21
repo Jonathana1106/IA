@@ -2,6 +2,7 @@ import cv2
 from preprocessing import *
 import numpy as np
 import random
+import os  # Add this import
 
 # Function to flatten an image
 def flatten_image(image):
