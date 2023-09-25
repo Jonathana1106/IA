@@ -1,7 +1,11 @@
 import sys
+
 from UI.mainUi import Ui_properties_Dialog
 from UI.generationUi import Ui_generation_ui
 from ImageProcesing.preprocessing import preProcessImage
+from GeneticAlgorithm.modular_main import main as objectiveImgMain
+from ImageProcesing.geneticAlgorithm import main as geneticAlgorithmMain
+from GeneticAlgorithm.main import getbarValue
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QT_TR_NOOP as tr
@@ -10,6 +14,8 @@ from PyQt5.QtCore import QT_TR_NOOP as tr
 #    ui.imageSearch_Button.clicked.connect(lambda: searchFile(ui))
 
 path = ""
+filterPath = ""
+objPath = ""
 iterations = -1
 population = -1
 gauss = False
@@ -28,6 +34,8 @@ def init():
     ui.setupUi(MainWindow)
     ui.gama_combobox.addItems(gama_list)
     ui.gama_combobox.setCurrentIndex(0)
+    ui.population_spinBox.setValue(100)
+    ui.iteration_spinBox.setValue(50)
     MainWindow.show()
     ui.imageSearch_Button.clicked.connect(lambda: searchFile(ui))
     ui.generate_Button.clicked.connect(lambda: getValues(ui))  
@@ -68,16 +76,18 @@ def getValues(ui):
 ## Generation Dialog
 ## Close Properties Dialog and Open Generation Dialog
 def generationUi(ui):
-    global path, iterations, population, gauss, median, resize, gama
+    global path, iterations, population, gauss, median, resize, gama, filterPath, objPath
 
     dlg = QtWidgets.QDialog()
     gen_ui = Ui_generation_ui()
     gen_ui.setupUi(dlg)
 
     dlg.show()
+    imageProcessing()
     setCOntent(gen_ui)
 
     print("Values from ui:")
+    
     print("Path: " + path)
     print("Iterations: " + str(iterations))
     print("Population: " + str(population))
@@ -85,9 +95,9 @@ def generationUi(ui):
     print("Gauss: " + str(gauss))
     print("Median: " + str(median))
     print("Resize: " + str(resize))
-    originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage = preProcessImage(path, resize, median, gauss, 1, 15, gama)
-
-
+    print("Filter Path: " + filterPath)
+    print("Obj Path: " + objPath)
+    
     dlg.exec_()
 
     #ui.properties_Dialog.close() 
@@ -95,9 +105,21 @@ def generationUi(ui):
 
 ## Generation Dialog, Set Content
 def setCOntent(ui):
-    global path, iterations, population
+    global path, iterations, population, gauss, median, resize, gama, filterPath, objPath
     ui.path_Label.setText("Path: " + path)
     ui.iterations_Label.setText("Iteraciones: " + str(iterations))
     ui.population_Label.setText("Población: " + str(population))
-    ui.originalPic_Viewer.setPixmap(QtGui.QPixmap("imgs/Imagen Mejorada.jpg"))
-    ui.generatedPic_View.setPixmap(QtGui.QPixmap(path))
+    ui.originalPic_Viewer.setPixmap(QtGui.QPixmap(filterPath))
+    ui.generatedPic_View.setPixmap(QtGui.QPixmap(objPath))
+
+    ui.progressBar.setMaximum(iterations)
+    ui.progressBar.setValue(0)
+    ui.progressBar.setFormat("0%")
+
+    geneticAlgorithmMain(epath = filterPath, objPath = objPath, generations=iterations, population_size=population, progressBar = ui.progressBar)
+
+def imageProcessing():
+    global path, iterations, population, gauss, median, resize, gama, filterPath, objPath
+    preProcessImageDicc = preProcessImage(path, resize, median, gauss, 1, 15, gama)
+    filterPath = preProcessImageDicc["epath"]
+    objPath = objectiveImgMain(img_path = filterPath)
