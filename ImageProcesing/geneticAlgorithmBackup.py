@@ -82,8 +82,8 @@ def main():
     population_size = 20  # Adjust as needed
 
     # Define genetic algorithm parameters
-    generations = 20
-    mutation_rate = 0.01
+    generations = 25
+    mutation_rate = 0.05
 
     population = initialize_population(population_size, flattened_enhanced_image, mutation_rate)
 
