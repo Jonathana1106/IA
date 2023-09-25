@@ -47,7 +47,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         #gaussBlurredImage = originalImage.copy()
         
         #Muestra la imagen original y las imágenes con los filtros aplicados
-        cv2.imshow("Imagen Original", originalImage)
+        #cv2.imshow("Imagen Original", originalImage)
         
         #Redimensionar la imagen "Downscale", la hace pequeña
         if resize:
@@ -60,7 +60,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         if median:
             medianBlurredImage = cv2.medianBlur(originalImage, 5)
             enhancedImage = cv2.convertScaleAbs(medianBlurredImage, alpha=alpha, beta=beta)
-            cv2.imshow("Imagen con Filtro de Mediana", medianBlurredImage)
+            #cv2.imshow("Imagen con Filtro de Mediana", medianBlurredImage)
         else:
             medianBlurredImage = []
         
@@ -68,7 +68,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         if gauss:
             gaussBlurredImage = cv2.GaussianBlur(originalImage, (5, 5), 0)
             enhancedImage = cv2.convertScaleAbs(gaussBlurredImage, alpha=alpha, beta=beta)
-            cv2.imshow("Imagen con Filtro Gaussiano", gaussBlurredImage)
+            #cv2.imshow("Imagen con Filtro Gaussiano", gaussBlurredImage)
         else:
             gaussBlurredImage = []
 
@@ -77,10 +77,13 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
             if esquemaColor in esquemaColores:
                 enhancedImage = cv2.cvtColor(enhancedImage, esquemaColores[esquemaColor])
         
-        #Quitar estas lineas para que no muestre las ventanas y solo retorne
+        # enhanced image path from original name
+        epath = imageRoute.rsplit(".", -1)[0] + "_enhanced.jpg"
+        cv2.imwrite(epath, enhancedImage)
 
-        cv2.imwrite("imgs/Imagen Mejorada.jpg", enhancedImage)
-        return {"original" : originalImage, "median": medianBlurredImage, "gauss" : gaussBlurredImage, "enhanced" : enhancedImage}
+        #cv2.imshow("Imagen con Ajuste de Contraste y Brillo", enhancedImage)
+
+        return {"original" : originalImage, "median": medianBlurredImage, "gauss" : gaussBlurredImage, "enhanced" : enhancedImage, "epath" : epath}
 
 #Ruta de la imagen
 #Ejemplo:

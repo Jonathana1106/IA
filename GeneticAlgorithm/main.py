@@ -2,11 +2,15 @@ import cv2
 import argparse
 import math
 import progressbar
-from pointillism import *
+from GeneticAlgorithm.pointillism import *
+
+barValue = progressbar.ProgressBar()
+
+
 
 # Crear un parser de argumentos para la línea de comandos
 parser = argparse.ArgumentParser(
-    description='eneración de Imágenes de Puntillismo')
+    description='Generación de Imágenes de Puntillismo')
 parser.add_argument('--palette-size', default=20, type=int,
                     help="Número de colores en la paleta base")
 parser.add_argument('--stroke-scale', default=0, type=int,
@@ -15,7 +19,7 @@ parser.add_argument('--gradient-smoothing-radius', default=0, type=int,
                     help="Radio del filtro de suavizado aplicado al gradiente (0 = automático)")
 parser.add_argument('--limit-image-size', default=0, type=int,
                     help="Limitar el tamaño de la imagen (0 = sin límites)")
-parser.add_argument('img_path', nargs='?', default="img/sansiro.png",
+parser.add_argument('img_path', nargs='?', default="GeneticAlgorithm/img/sansiro.png",
                     help="Ruta de la imagen de entrada")
 
 args = parser.parse_args()
@@ -57,8 +61,8 @@ print("Extender paleta de colores...")
 palette = palette.extend([(0, 50, 0), (15, 30, 0), (-15, 30, 0)])
 
 # Mostrar la paleta de colores
-cv2.imshow("palette", palette.to_image())
-cv2.waitKey(200)
+#cv2.imshow("palette", palette.to_image())
+#cv2.waitKey(200)
 
 print("Calculando gradientes...")
 # Calcular el campo de vectores del gradiente
@@ -99,6 +103,9 @@ for h in bar(range(0, len(grid), batch_size)):
                     angle, 0, 360, color, -1, cv2.LINE_AA)
 
 # Mostrar la imagen resultante y guardarla en un archivo
-cv2.imshow("res", limit_size(res, 1080))
-cv2.imwrite(res_path, res)
-cv2.waitKey(0)
+#cv2.imshow("res", limit_size(res, 1080))
+#cv2.imwrite(res_path, res)
+#cv2.waitKey(0)
+def getbarValue():
+    global barValue
+    return barValue.finished

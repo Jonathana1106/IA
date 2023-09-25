@@ -1,5 +1,4 @@
 import cv2
-from preprocessing import *
 import numpy as np
 import random
 
@@ -55,7 +54,13 @@ def mutation(individual, mutation_rate):
     return mutated_individual
 
 # Genetic Algorithm main loop
-def genetic_algorithm(population, target_image, generations, tournament_size, mutation_rate):
+def genetic_algorithm(population, target_image, generations, tournament_size, mutation_rate, progressBar):
+
+    # todo: implement progress bar
+    ## avance progress bar for each generation
+    
+
+
     for generation in range(generations):
         # Evaluate fitness for each individual
         fitness_values = [fitness(individual, target_image) for individual in population]
@@ -84,33 +89,24 @@ def genetic_algorithm(population, target_image, generations, tournament_size, mu
     best_individual = population[np.argmin(fitness_values)]
     return best_individual
 
-def main():
+def main(epath, objPath, generations=10, population_size=50, tournament_size=5, mutation_rate=0.01, progressBar = None):
 
-    imageRoute = "C:/Users/Renzo/Downloads/test.jpg"
-    originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage = preProcessImage(imageRoute, True, True, True, 1, 15, None)
+    enhancedImage = cv2.imread(repr(epath))
+    objectiveImage = cv2.imread(repr(objPath))
 
     flattened_enhanced_image = flatten_image(enhancedImage)
-
-    # Initialize a population of images
-    population_size = 100  # Adjust as needed
-
-    # Define genetic algorithm parameters
-    generations = 50
-    tournament_size = 5
-    mutation_rate = 0.01
+    flattened_objective_image = flatten_image(objectiveImage)
 
     population = initialize_population(population_size, flattened_enhanced_image, mutation_rate)
 
     # Run the genetic algorithm to enhance the image
-    best_image = genetic_algorithm(population, flattened_enhanced_image, generations, tournament_size, mutation_rate)
+    best_image = genetic_algorithm(population, flattened_enhanced_image, generations, tournament_size, mutation_rate, progressBar)
 
     # Reshape the best image to its original shape
     best_image = best_image.reshape(enhancedImage.shape)
 
     # Display or save the best-enhanced image
-    cv2.imshow("Best Enhanced Image", best_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    #cv2.imshow("Best Enhanced Image", best_image)
+    #cv2.waitKey(0)
+    #cv2.destroyAllWindows()
     
-if __name__ == "__main__":
-    main()

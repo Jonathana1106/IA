@@ -1,6 +1,6 @@
 import cv2
 import math
-from pointillism import *
+from GeneticAlgorithm.pointillism import *
 import progressbar
 
 def generate_pointillism_image(
@@ -78,20 +78,20 @@ def generate_pointillism_image(
 
     return res
 
-if __name__ == "__main__":
+def main(palette_size=20, stroke_scale=0, gradient_smoothing_radius=0, limit_image_size=0, img_path="GeneticAlgorithm/img/sansiro.png"):
     import argparse
 
     # Crear un parser de argumentos para la línea de comandos
     parser = argparse.ArgumentParser(description='Generación de Imágenes de Puntillismo')
-    parser.add_argument('--palette-size', default=20, type=int,
+    parser.add_argument('--palette-size', default=palette_size, type=int,
                         help="Número de colores en la paleta base")
-    parser.add_argument('--stroke-scale', default=0, type=int,
+    parser.add_argument('--stroke-scale', default=stroke_scale, type=int,
                         help="Escala de los trazos del pincel (0 = automático)")
-    parser.add_argument('--gradient-smoothing-radius', default=0, type=int,
+    parser.add_argument('--gradient-smoothing-radius', default=gradient_smoothing_radius, type=int,
                         help="Radio del filtro de suavizado aplicado al gradiente (0 = automático)")
-    parser.add_argument('--limit-image-size', default=0, type=int,
+    parser.add_argument('--limit-image-size', default=limit_image_size, type=int,
                         help="Limitar el tamaño de la imagen (0 = sin límites)")
-    parser.add_argument('img_path', nargs='?', default="GeneticAlgorithm/img/sansiro.png",
+    parser.add_argument('img_path', nargs='?', default=img_path,
                         help="Ruta de la imagen de entrada")
 
     args = parser.parse_args()
@@ -103,5 +103,8 @@ if __name__ == "__main__":
         args.limit_image_size
     )
     
-    cv2.imshow("result", limit_size(generated_image, 1080))
-    cv2.waitKey(0)
+    gpath = img_path.rsplit(".", -1)[0] + "_ObjImage.jpg"
+    cv2.imwrite(gpath, generated_image)
+    #cv2.imshow("result", limit_size(generated_image, 1080))
+
+    return gpath

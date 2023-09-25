@@ -116,7 +116,7 @@ def setCOntent(ui):
     ui.progressBar.setValue(0)
     ui.progressBar.setFormat("0%")
 
-    geneticAlgorithmMain(epath = filterPath, objPath = objPath, generations=iterations, population_size=population, progressBar = ui.progressBar)
+    #geneticAlgorithmMain(epath = filterPath, objPath = objPath, generations=iterations, population_size=population, progressBar = ui.progressBar)
 
 def imageProcessing():
     global path, iterations, population, gauss, median, resize, gama, filterPath, objPath
