@@ -40,7 +40,7 @@ def mutation(individual, mutation_rate):
     return mutated_individual
 
 # Genetic Algorithm main loop
-def genetic_algorithm(population, target_image, generations, tournament_size, mutation_rate, progressBar):
+#def genetic_algorithm(population, target_image, generations, tournament_size, mutation_rate, progressBar):
 
     # todo: implement progress bar
     ## avance progress bar for each generation
