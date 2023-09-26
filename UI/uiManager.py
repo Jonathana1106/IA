@@ -97,8 +97,11 @@ def generationUi(ui):
     print("Resize: " + str(resize))
     print("Filter Path: " + filterPath)
     print("Obj Path: " + objPath)
-    
+
+
     dlg.exec_()
+
+    geneticAlgorithmMain(epath = filterPath, objPath = objPath, generations=iterations, population_size=population, ui = gen_ui)
 
     #ui.properties_Dialog.close() 
     #ui.window.close()
@@ -112,11 +115,13 @@ def setCOntent(ui):
     ui.originalPic_Viewer.setPixmap(QtGui.QPixmap(filterPath))
     ui.generatedPic_View.setPixmap(QtGui.QPixmap(objPath))
 
+    print("Epath: "+ filterPath)
+    print("ObjPath: "+ objPath)
+
     ui.progressBar.setMaximum(iterations)
     ui.progressBar.setValue(0)
     ui.progressBar.setFormat("0%")
 
-    #geneticAlgorithmMain(epath = filterPath, objPath = objPath, generations=iterations, population_size=population, progressBar = ui.progressBar)
 
 def imageProcessing():
     global path, iterations, population, gauss, median, resize, gama, filterPath, objPath

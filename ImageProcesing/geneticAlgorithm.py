@@ -1,4 +1,5 @@
 import cv2
+from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
 import random
 
@@ -39,16 +40,19 @@ def mutation(individual, mutation_rate):
             mutated_individual[i] = np.random.randint(0, 256)
     return mutated_individual
 
-# Genetic Algorithm main loop
-#def genetic_algorithm(population, target_image, generations, tournament_size, mutation_rate, progressBar):
+## Pyqt progress bar as progressBar
+def genetic_algorithm(population, target_image, generations, mutation_rate, progressBar):
 
-    # todo: implement progress bar
-    ## avance progress bar for each generation
-    
+    progressBar.setValue(0)
+    progressBar.setMaximum(generations)
+    progressBar.setFormat("0")
+    progressBar.update()
 
-
-def genetic_algorithm(population, target_image, generations, mutation_rate):
     for generation in range(generations):
+
+        progressBar.setFormat(str(generation+1))
+        progressBar.update()
+
         # Evaluate fitness for each individual
         fitness_values = [fitness(individual, target_image) for individual in population]
 
@@ -72,36 +76,33 @@ def genetic_algorithm(population, target_image, generations, mutation_rate):
         best_fitness = min(fitness_values)
         print(f"Generation {generation+1}, Best Fitness: {best_fitness}")
 
+        progressBar.setValue(generation+1)
+
     # Return the best individual (image) found
     best_individual = population[np.argmin(fitness_values)]
     return best_individual
 
-def main(epath, objPath, generations=10, population_size=50, tournament_size=5, mutation_rate=0.01, progressBar = None):
+## Pyqt progress bar as progressBar
+def main(epath, objPath, generations=10, population_size=50, mutation_rate=0.01, ui = None):
 
-    enhancedImage = cv2.imread(repr(epath))
-    objectiveImage = cv2.imread(repr(objPath))
+    enhancedImage = cv2.imread(epath)
+    #objectiveImage = cv2.imread(objPath)
 
     flattened_enhanced_image = flatten_image(enhancedImage)
-    flattened_objective_image = flatten_image(objectiveImage)
-
-    # Initialize a population of images
-    population_size = 20  # Adjust as needed
-
-    # Define genetic algorithm parameters
-    generations = 20
-    mutation_rate = 0.01
+    #flattened_objective_image = flatten_image(objectiveImage)
 
     population = initialize_population(population_size, flattened_enhanced_image, mutation_rate)
 
     # Run the genetic algorithm to enhance the image
-    best_image = genetic_algorithm(population, flattened_enhanced_image, generations, tournament_size, mutation_rate, progressBar)
-    best_image = genetic_algorithm(population, flattened_enhanced_image, generations, mutation_rate)
+    best_image = genetic_algorithm(population, flattened_enhanced_image, generations, mutation_rate, ui.progressBar)
 
     # Reshape the best image to its original shape
     best_image = best_image.reshape(enhancedImage.shape)
 
+    ui.generatedPic_View.setPixmap(QtGui.QPixmap(best_image))
+
     # Display or save the best-enhanced image
-    #cv2.imshow("Best Enhanced Image", best_image)
-    #cv2.waitKey(0)
+    cv2.imshow("Best Enhanced Image", best_image)
+    cv2.waitKey(0)
     #cv2.destroyAllWindows()
     
