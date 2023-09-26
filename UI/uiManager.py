@@ -3,15 +3,11 @@ import sys
 from UI.mainUi import Ui_properties_Dialog
 from UI.generationUi import Ui_generation_ui
 from ImageProcesing.preprocessing import preProcessImage
-from GeneticAlgorithm.modular_main import main as objectiveImgMain
 from ImageProcesing.geneticAlgorithm import main as geneticAlgorithmMain
-from GeneticAlgorithm.main import getbarValue
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QT_TR_NOOP as tr
 
-#def uiManager(ui):
-#    ui.imageSearch_Button.clicked.connect(lambda: searchFile(ui))
 
 path = ""
 filterPath = ""
@@ -101,7 +97,7 @@ def generationUi(ui):
 
     dlg.exec_()
 
-    geneticAlgorithmMain(epath = filterPath, objPath = objPath, generations=iterations, population_size=population, ui = gen_ui)
+    geneticAlgorithmMain(originalPath= path, epath = filterPath, generations=iterations, population_size=population, ui = gen_ui)
 
     #ui.properties_Dialog.close() 
     #ui.window.close()
@@ -125,6 +121,4 @@ def setCOntent(ui):
 
 def imageProcessing():
     global path, iterations, population, gauss, median, resize, gama, filterPath, objPath
-    preProcessImageDicc = preProcessImage(path, resize, median, gauss, 1, 15, gama)
-    filterPath = preProcessImageDicc["epath"]
-    objPath = objectiveImgMain(img_path = filterPath)
+    _,_,_,_,filtherPath = preProcessImage(path, resize, median, gauss, 1, 15, gama)
