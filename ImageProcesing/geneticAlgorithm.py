@@ -10,8 +10,10 @@ import math
 ##os.environ['QT_QPA_PLATFORM'] = 'xcb'
 
 fileName = ""
+extension = ""
 ## TODO: Video
 imageGenerationsList = []
+pathGenerationsList = []
 
 ##############################################################################################
 def load_image(image_path, size_limit=0):
@@ -223,15 +225,14 @@ def display_result_image(result_img):
 
 
 def pintar(individual):
-    global fileName
+    global fileName, extension
     ##################################################################################
     pixels = np.array(individual)
     palette_size = 50
     stroke_scale = 0
     gradient_smoothing_radius = 0
     limit_image_size = 0
-    ## TODO: 
-    img_path = "ImageProcesing/img/" + fileName + "_enhanced.jpg"
+    img_path = "ImageProcesing/img/" + fileName + "_enhanced" + extension
     ##################################################################################
     img = load_image(img_path, limit_image_size)
     stroke_scale = calculate_stroke_scale(img, stroke_scale)
@@ -256,14 +257,16 @@ def flatten_image(image):
 
 # Function to create an initial population of images based on a reference image
 def initialize_population(population_size, reference_image, mutation_rate):
-    global fileName
+    global fileName, extension, imageGenerationsList, pathGenerationsList
     population = []
     for i in range(population_size):
         individual = reference_image.copy()
         individual = mutation(individual, mutation_rate)
         painting_result =- pintar(individual)
-        ## TODO:
-        custom_filename = "Results/img/" + fileName +  f"_pointillism_{i}.jpg"
+        custom_filename = "Results/img/" + fileName +  f"_pointillism_{i}"+ extension
+
+        pathGenerationsList.append(custom_filename)
+
         save_image(painting_result, custom_filename)
         population.append(individual)
     return population
@@ -327,11 +330,15 @@ def genetic_algorithm(population, target_image, generations, mutation_rate, prog
     return best_individual
 
 def main(originalPath, epath, generations=10, population_size=50, mutation_rate=0.01, ui = None):
-    global fileName
+    global fileName, extension
     enhancedImage = cv2.imread(epath)
     originalImage = cv2.imread(originalPath)
     fileName = originalPath.rsplit("/", -1)[-1]
     fileName = fileName.rsplit(".", -1)[0]
+    extension = "." + originalPath.rsplit(".", -1)[-1]
+
+    print("Image: " + fileName)
+    print("Extension: " + extension)
 
     flattened_enhanced_image = flatten_image(enhancedImage)
     #flattened_objective_image = flatten_image(objectiveImage)
@@ -342,8 +349,8 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     best_image = genetic_algorithm(population, flattened_enhanced_image, generations, mutation_rate, ui.progressBar)
 
     ######################################################################################################
-    painting_result = pintar(flattened_enhanced_image)
-    img_path = "Results/img/" + fileName + "_enhancedResult.png"
+    painting_result = pintar(best_image)
+    img_path = "Results/img/" + fileName + "_enhancedResult" + extension
     ##custom_filename = img_path.rsplit(".", -1)[0] + f"_pointillism_final.jpg"
     save_image(painting_result, img_path)
     ######################################################################################################
@@ -351,8 +358,26 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     # Reshape the best image to its original shape
     best_image = best_image.reshape(enhancedImage.shape)
 
-    ## TODO: aqui hay un error al final creo
-    ui.generatedPic_View.setPixmap(QtGui.QPixmap(best_image))
+    for filename in pathGenerationsList:
+        img = cv2.imread(filename)
+        height, width, layers = img.shape
+        size = (width, height)
+        imageGenerationsList.append(img)
+
+    out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+
+    for i in range(len(imageGenerationsList)):
+        out.write(imageGenerationsList[i])
+    out.release()
+
+    out_path = "Results/img/" + 'project.avi'
+
+    cv2.imshow("Best Enhanced Image", best_image)
+    cv2.waitKey(0)
+
+    ui.generatedPic_View.setPixmap(QtGui.QPixmap(img_path))
+
+
 
     # Display or save the best-enhanced image
     cv2.imshow("Best Enhanced Image", best_image)

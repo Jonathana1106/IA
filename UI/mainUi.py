@@ -98,7 +98,7 @@ class Ui_properties_Dialog(object):
 "Imagen"))
         self.iteration_Box.setTitle(_translate("properties_Dialog", "Iteraciones"))
         self.population_Box.setTitle(_translate("properties_Dialog", "Población"))
-        self.gama_box.setTitle(_translate("properties_Dialog", "Gama y brillo"))
+        self.gama_box.setTitle(_translate("properties_Dialog", "Esquema de Color"))
         self.resize_checkb.setText(_translate("properties_Dialog", "Resize"))
         self.median_checkb.setText(_translate("properties_Dialog", "Median"))
         self.gauss_checkb.setText(_translate("properties_Dialog", "Gauss"))

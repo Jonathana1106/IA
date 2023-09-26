@@ -75,7 +75,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         #cv2.waitKey(0)
         #cv2.destroyAllWindows()
 
-        epath = imageRoute.rsplit(".", -1)[0] + "_enhanced.jpg"
+        epath = imageRoute.rsplit(".", -1)[0] + "_enhanced." + imageRoute.rsplit(".", -1)[1]
         cv2.imwrite(epath, enhancedImage, [cv2.IMWRITE_JPEG_QUALITY, 95])
         return originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage, epath
 

@@ -131,7 +131,7 @@ Imagen</string>
     <item>
      <widget class="QGroupBox" name="gama_box">
       <property name="title">
-       <string>Gama y brillo</string>
+       <string>Esquema de Color</string>
       </property>
       <widget class="QComboBox" name="gama_combobox">
        <property name="geometry">
