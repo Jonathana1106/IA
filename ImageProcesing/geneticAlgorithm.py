@@ -7,6 +7,7 @@ from skimage.metrics import structural_similarity as ssim
 import os
 from ImageProcesing.pointillism import *
 import math
+import imageio
 ##os.environ['QT_QPA_PLATFORM'] = 'xcb'
 
 fileName = ""
@@ -358,19 +359,42 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     # Reshape the best image to its original shape
     best_image = best_image.reshape(enhancedImage.shape)
 
-    for filename in pathGenerationsList:
-        img = cv2.imread(filename)
-        height, width, layers = img.shape
-        size = (width, height)
-        imageGenerationsList.append(img)
+    ######################################################################################################
+    # Directorio donde se encuentran las imágenes
+    input_dir = "Results/img"
+    # Obtener la lista de nombres de archivo de las imágenes en el directorio
+    image_files = [f for f in os.listdir(input_dir) if f.endswith(".png") or f.endswith(".jpg")]
+    # Ordenar las imágenes por nombre de archivo si es necesario
+    image_files.sort()
+    # Establecer la ruta y nombre del archivo de salida del GIF o AVI
+    output_dir = "Results/img"
+    output_file = os.path.join(output_dir, "output.gif") # o "output.avi"
+    # Configurar el formato y la velocidad de cuadros (FPS)
+    fps = 10  # Cuadros por segundo
+    # Crear una lista para almacenar las imágenes que se incluirán en el GIF
+    images = []
+    # Cargar las imágenes y agregarlas a la lista
+    for image_file in image_files:
+        image_path = os.path.join(input_dir, image_file)
+        img = imageio.imread(image_path)
+        images.append(img)
+    # Guardar la lista de imágenes como un archivo GIF
+    imageio.mimsave(output_file, images, duration=1 / fps)
+    ######################################################################################################
 
-    out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
+    # for filename in pathGenerationsList:
+    #     img = cv2.imread(filename)
+    #     height, width, layers = img.shape
+    #     size = (width, height)
+    #     imageGenerationsList.append(img)
 
-    for i in range(len(imageGenerationsList)):
-        out.write(imageGenerationsList[i])
-    out.release()
+    # out = cv2.VideoWriter('project.avi', cv2.VideoWriter_fourcc(*'DIVX'), 15, size)
 
-    out_path = "Results/img/" + 'project.avi'
+    # for i in range(len(imageGenerationsList)):
+    #     out.write(imageGenerationsList[i])
+    # out.release()
+
+    # out_path = "Results/img/" + 'project.avi'
 
     cv2.imshow("Best Enhanced Image", best_image)
     cv2.waitKey(0)
