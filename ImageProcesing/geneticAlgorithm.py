@@ -396,9 +396,10 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
 
     # out_path = "Results/img/" + 'project.avi'
 
-    cv2.imshow("Best Enhanced Image", best_image)
-    cv2.waitKey(0)
+#    cv2.imshow("Best Enhanced Image", best_image)
+#    cv2.waitKey(0)
 
+    #ui.generatedPic_View.setMovie(QtGui.QMovie(output_file))
     ui.generatedPic_View.setPixmap(QtGui.QPixmap(img_path))
 
 
