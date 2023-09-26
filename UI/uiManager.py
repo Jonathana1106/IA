@@ -92,7 +92,6 @@ def generationUi(ui):
     print("Median: " + str(median))
     print("Resize: " + str(resize))
     print("Filter Path: " + filterPath)
-    print("Obj Path: " + objPath)
 
 
     dlg.exec_()
@@ -112,7 +111,6 @@ def setCOntent(ui):
     ui.generatedPic_View.setPixmap(QtGui.QPixmap(objPath))
 
     print("Epath: "+ filterPath)
-    print("ObjPath: "+ objPath)
 
     ui.progressBar.setMaximum(iterations)
     ui.progressBar.setValue(0)
@@ -121,4 +119,5 @@ def setCOntent(ui):
 
 def imageProcessing():
     global path, iterations, population, gauss, median, resize, gama, filterPath, objPath
-    _,_,_,_,filtherPath = preProcessImage(path, resize, median, gauss, 1, 15, gama)
+    originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage, epath = preProcessImage(path, resize, median, gauss, 1, 15, gama)
+    filterPath = epath

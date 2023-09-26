@@ -7,7 +7,7 @@ from skimage.metrics import structural_similarity as ssim
 import os
 from ImageProcesing.pointillism import *
 import math
-os.environ['QT_QPA_PLATFORM'] = 'xcb'
+##os.environ['QT_QPA_PLATFORM'] = 'xcb'
 
 fileName = ""
 ## TODO: Video
@@ -340,6 +340,7 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     enhancedImage = cv2.imread(epath)
     originalImage = cv2.imread(originalPath)
     fileName = originalPath.rsplit("/", -1)[-1]
+    fileName = fileName.rsplit(".", -1)[0]
 
     flattened_enhanced_image = flatten_image(enhancedImage)
     #flattened_objective_image = flatten_image(objectiveImage)
