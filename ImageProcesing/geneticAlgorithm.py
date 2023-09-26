@@ -262,8 +262,7 @@ def initialize_population(population_size, reference_image, mutation_rate):
         individual = mutation(individual, mutation_rate)
         painting_result =- pintar(individual)
         ## TODO:
-        img_path = "Results/img/" + fileName
-        custom_filename = img_path.rsplit(".", -1)[0] + f"_pointillism_{i}.jpg"
+        custom_filename = "Results/img/" + fileName +  f"_pointillism_{i}.jpg"
         save_image(painting_result, custom_filename)
         population.append(individual)
     return population
@@ -295,17 +294,7 @@ def mutation(individual, mutation_rate):
 
 # Genetic Algorithm main loop
 def genetic_algorithm(population, target_image, generations, mutation_rate, progressBar):
-
-    progressBar.setValue(0)
-    progressBar.setMaximum(generations)
-    progressBar.setFormat("0")
-    progressBar.update()
-
     for generation in range(generations):
-
-        progressBar.setFormat(str(generation+1))
-        progressBar.update()
-
         # Evaluate fitness for each individual
         fitness_values = [fitness(individual, target_image) for individual in population]
 
@@ -329,7 +318,8 @@ def genetic_algorithm(population, target_image, generations, mutation_rate, prog
         best_fitness = min(fitness_values)
         print(f"Generation {generation+1}, Best Fitness: {best_fitness}")
 
-        progressBar.setValue(generation+1)
+        #progressBar.setValue(generation+1)
+        #progressBar.update()
 
     # Return the best individual (image) found
     best_individual = population[np.argmin(fitness_values)]

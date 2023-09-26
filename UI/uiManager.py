@@ -43,7 +43,7 @@ def searchFile(ui):
 
     dlg = QtWidgets.QFileDialog()
     dlg.setFileMode(QtWidgets.QFileDialog.AnyFile)
-    dlg.setNameFilter(tr("Images (*.png *.xpm *.jpg)"))
+    dlg.setNameFilter(tr("Images (*.png *.xpm *.jpg *.jpeg)"))
     filenames = QtCore.QStringListModel()
 
     if dlg.exec_():
@@ -94,9 +94,15 @@ def generationUi(ui):
     print("Filter Path: " + filterPath)
 
 
-    dlg.exec_()
+    gen_ui.progressBar.setMaximum(iterations)
+    gen_ui.progressBar.setValue(0)
+    gen_ui.progressBar.update()
+
 
     geneticAlgorithmMain(originalPath= path, epath = filterPath, generations=iterations, population_size=population, ui = gen_ui)
+
+    dlg.exec_()
+
 
     #ui.properties_Dialog.close() 
     #ui.window.close()

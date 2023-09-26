@@ -218,6 +218,7 @@ def display_result_image(result_img):
 
 
 def pintar(individual):
+
         ##################################################################################
         pixels = np.array(individual)
         palette_size = 20
