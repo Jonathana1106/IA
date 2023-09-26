@@ -226,11 +226,12 @@ def pintar(individual):
     global fileName
     ##################################################################################
     pixels = np.array(individual)
-    palette_size = 20
+    palette_size = 50
     stroke_scale = 0
     gradient_smoothing_radius = 0
     limit_image_size = 0
-    img_path = "Results/img/" + fileName + "_enhanced.png"
+    ## TODO: 
+    img_path = "ImageProcesing/img/" + fileName + "_enhanced.jpg"
     ##################################################################################
     img = load_image(img_path, limit_image_size)
     stroke_scale = calculate_stroke_scale(img, stroke_scale)
@@ -351,7 +352,7 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     best_image = genetic_algorithm(population, flattened_enhanced_image, generations, mutation_rate, ui.progressBar)
 
     ######################################################################################################
-    painting_result =- pintar(best_image)
+    painting_result = pintar(flattened_enhanced_image)
     img_path = "Results/img/" + fileName + "_enhancedResult.png"
     ##custom_filename = img_path.rsplit(".", -1)[0] + f"_pointillism_final.jpg"
     save_image(painting_result, img_path)
@@ -360,6 +361,7 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     # Reshape the best image to its original shape
     best_image = best_image.reshape(enhancedImage.shape)
 
+    ## TODO: aqui hay un error al final creo
     ui.generatedPic_View.setPixmap(QtGui.QPixmap(best_image))
 
     # Display or save the best-enhanced image
