@@ -74,7 +74,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         #cv2.imshow("Imagen Mejorada", enhancedImage)
         #cv2.waitKey(0)
         #cv2.destroyAllWindows()
-
+        cv2.imwrite("Results/img/patito_enhanced.png", enhancedImage, [cv2.IMWRITE_JPEG_QUALITY, 95])
         return originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage
 
 #Ruta de la imagen
