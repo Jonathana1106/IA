@@ -1,3 +1,4 @@
+import os
 import cv2
 
 #Parámetros de referencia

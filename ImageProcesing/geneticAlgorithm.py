@@ -1,7 +1,10 @@
 import cv2
+from ImageProcesing.preprocessing import *
 from PyQt5 import QtCore, QtGui, QtWidgets
 import numpy as np
 import random
+from skimage.metrics import structural_similarity as ssim
+import os  # Add this import
 
 # Function to flatten an image
 def flatten_image(image):
@@ -20,8 +23,9 @@ def initialize_population(population_size, reference_image, mutation_rate):
 def fitness(image, target_image):
     # Implement your fitness evaluation logic here
     # This could be based on image quality, similarity to target, etc.
+    ssim_value = ssim(image, target_image, multichannel=True)  # Set multichannel=True for color images
     # Return a higher value for better fitness.
-    return np.sum(np.abs(image - target_image))
+    return -ssim_value
 
 # Function for one-point crossover
 def one_point_crossover(parent1, parent2):
@@ -40,7 +44,6 @@ def mutation(individual, mutation_rate):
             mutated_individual[i] = np.random.randint(0, 256)
     return mutated_individual
 
-## Pyqt progress bar as progressBar
 def genetic_algorithm(population, target_image, generations, mutation_rate, progressBar):
 
     progressBar.setValue(0)
