@@ -2,6 +2,7 @@ import cv2
 from preprocessing import *
 import numpy as np
 import random
+from skimage.metrics import structural_similarity as ssim
 import os  # Add this import
 
 # Function to flatten an image
@@ -21,8 +22,9 @@ def initialize_population(population_size, reference_image, mutation_rate):
 def fitness(image, target_image):
     # Implement your fitness evaluation logic here
     # This could be based on image quality, similarity to target, etc.
+    ssim_value = ssim(image, target_image, multichannel=True)  # Set multichannel=True for color images
     # Return a higher value for better fitness.
-    return np.sum(np.abs(image - target_image))
+    return -ssim_value
 
 # Function for one-point crossover
 def one_point_crossover(parent1, parent2):
@@ -79,10 +81,10 @@ def main():
     flattened_enhanced_image = flatten_image(enhancedImage)
 
     # Initialize a population of images
-    population_size = 20  # Adjust as needed
+    population_size = 100  # Adjust as needed
 
     # Define genetic algorithm parameters
-    generations = 20
+    generations = 50
     mutation_rate = 0.01
 
     population = initialize_population(population_size, flattened_enhanced_image, mutation_rate)
