@@ -350,7 +350,7 @@ def main(originalPath, epath, generations=10, population_size=50, mutation_rate=
     best_image = genetic_algorithm(population, flattened_enhanced_image, generations, mutation_rate, ui.progressBar)
 
     ######################################################################################################
-    painting_result = pintar(best_image)
+    painting_result = pintar(flattened_enhanced_image)
     img_path = "Results/img/" + fileName + "_enhancedResult" + extension
     ##custom_filename = img_path.rsplit(".", -1)[0] + f"_pointillism_final.jpg"
     save_image(painting_result, img_path)
