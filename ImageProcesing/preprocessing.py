@@ -1,3 +1,4 @@
+import os
 import cv2
 
 #Parámetros de referencia
@@ -32,21 +33,27 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         print("No se puede cargar la imagen.")
 
     else:
+        # Initialize enhancedImage
+        enhancedImage = originalImage.copy()
+
         #Muestra la imagen original y las imágenes con los filtros aplicados
-        cv2.imshow("Imagen Original", originalImage)
+        #cv2.imshow("Imagen Original", originalImage)
         
         #Redimensionar la imagen "Downscale", la hace pequeña
         if resize:
-            #Especifica las nuevas dimensiones o el factor de escala de un 0.8 al tamaño original
-            newWidth = 576
-            newHeight = 714
+            #Especifica las nuevas dimensiones o el factor de escala de un 0.75 al tamaño original
+            originalHeight, originalWidth, _ = originalImage.shape
+
+            newWidth = int(originalWidth * 0.75)
+            newHeight = int(originalHeight * 0.75)
+
             originalImage = cv2.resize(originalImage, (newWidth, newHeight))
 
         #Aplica filtro de mediana para reducir el ruido
         if median:
             medianBlurredImage = cv2.medianBlur(originalImage, 5)
             enhancedImage = cv2.convertScaleAbs(medianBlurredImage, alpha=alpha, beta=beta)
-            cv2.imshow("Imagen con Filtro de Mediana", medianBlurredImage)
+            #cv2.imshow("Imagen con Filtro de Mediana", medianBlurredImage)
         else:
             medianBlurredImage = []
         
@@ -54,7 +61,7 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
         if gauss:
             gaussBlurredImage = cv2.GaussianBlur(originalImage, (5, 5), 0)
             enhancedImage = cv2.convertScaleAbs(gaussBlurredImage, alpha=alpha, beta=beta)
-            cv2.imshow("Imagen con Filtro Gaussiano", gaussBlurredImage)
+            #cv2.imshow("Imagen con Filtro Gaussiano", gaussBlurredImage)
         else:
             gaussBlurredImage = []
 
@@ -64,19 +71,16 @@ def preProcessImage(imageRoute, resize, median, gauss, alpha, beta, esquemaColor
                 enhancedImage = cv2.cvtColor(enhancedImage, esquemaColores[esquemaColor])
         
         #Quitar estas lineas para que no muestre las ventanas y solo retorne
-        cv2.imshow("Imagen Mejorada", enhancedImage)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+        #cv2.imshow("Imagen Mejorada", enhancedImage)
+        #cv2.waitKey(0)
+        #cv2.destroyAllWindows()
 
-        return originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage
+        epath = imageRoute.rsplit(".", -1)[0] + "_enhanced." + imageRoute.rsplit(".", -1)[1]
+        cv2.imwrite(epath, enhancedImage, [cv2.IMWRITE_JPEG_QUALITY, 95])
+        return originalImage, medianBlurredImage, gaussBlurredImage, enhancedImage, epath
 
 #Ruta de la imagen
 #Ejemplo:
-imageRoute = "C:/Users/Renzo/Downloads/test.jpg"
+#imageRoute = "C:/Users/Renzo/Downloads/test.jpg"
 
-
-#Sin usar esquema de color
-#preProcessImage(imageRoute, True, True, False, 1, 15, None)
-
-#Usando esquema de color válido
-preProcessImage(imageRoute, True, True, False, 1, 15, "BGR2XYZ")
+#preProcessImage(imageRoute, True, True, True, 1, 15, "BGR2RGB")

@@ -48,52 +48,6 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="iteration_Box">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>80</y>
-     <width>181</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Cantidad de Iteraciones</string>
-   </property>
-   <widget class="QSpinBox" name="iteration_spinBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>159</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="population_Box">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>80</y>
-     <width>181</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Tamaño de Población</string>
-   </property>
-   <widget class="QSpinBox" name="population_spinBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>159</width>
-      <height>24</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
   <widget class="QWidget" name="horizontalLayoutWidget_2">
    <property name="geometry">
     <rect>
@@ -119,6 +73,108 @@
       <property name="text">
        <string>Transformar 
 Imagen</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>381</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <widget class="QGroupBox" name="iteration_Box">
+      <property name="title">
+       <string>Iteraciones</string>
+      </property>
+      <widget class="QSpinBox" name="iteration_spinBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>101</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="population_Box">
+      <property name="title">
+       <string>Población</string>
+      </property>
+      <widget class="QSpinBox" name="population_spinBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>101</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="maximum">
+        <number>250</number>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="gama_box">
+      <property name="title">
+       <string>Esquema de Color</string>
+      </property>
+      <widget class="QComboBox" name="gama_combobox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>101</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_4">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>120</y>
+     <width>361</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <item>
+     <widget class="QCheckBox" name="resize_checkb">
+      <property name="text">
+       <string>Resize</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="median_checkb">
+      <property name="text">
+       <string>Median</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="gauss_checkb">
+      <property name="text">
+       <string>Gauss</string>
       </property>
      </widget>
     </item>
